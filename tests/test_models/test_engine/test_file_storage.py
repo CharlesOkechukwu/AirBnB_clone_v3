@@ -121,3 +121,17 @@ class TestFileStorage(unittest.TestCase):
         inst.save()
         self.assertTrue(storage.get(State, "fake_id") is None)
         self.assertTrue(storage.get(cls=State, id=inst.id) is not None)
+
+    def test_count_file_storage(self):
+        """test count function in file storage"""
+        from models import storage
+        old = storage.count()
+        inst = State(name="Texas")
+        inst.save()
+        curr = storage.count()
+        self.assertGreater(curr, old)
+        state_old = storage.count(State)
+        inst2 = State(name="California")
+        inst2.save()
+        state_new = storage.count(State)
+        self.assertGreater(state_new, state_old)
