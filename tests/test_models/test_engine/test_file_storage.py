@@ -113,3 +113,11 @@ class TestFileStorage(unittest.TestCase):
         with open("file.json", "r") as f:
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
+
+    def test_get_file_storage(self):
+        """test get function in file storage"""
+        from models import storage
+        inst = State(name="Chicago")
+        inst.save()
+        self.assertTrue(storage.get(State, "fake_id") is None)
+        self.assertTrue(storage.get(cls=State, id=inst.id) is not None)
