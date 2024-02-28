@@ -15,8 +15,8 @@ def get_states():
         states = storage.all(State)
         return jsonify([st.to_dict() for st in states.values()])
     else:
-        body = request.get_json()
-        if not request.is_json:
+        body = request.get_json(force=True, silent=True)
+        if body is None:
             abort(400, description="Not a JSON")
         if "name" not in body:
             abort(400, description="Missing Name")
@@ -41,8 +41,8 @@ def put_state(state_id):
         obj = storage.get(State, str(state_id))
         if obj is None:
             abort(404, description="Not Found")
-        body = request.get_json()
-        if not request.is_json:
+        body = request.get_json(force=True, silent=True)
+        if body is None:
             abort(400, description="Not a JSON")
         for k, v in body.items():
             if k not in ["created_at", "updated_at", "id"]:
